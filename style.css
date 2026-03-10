@@ -335,6 +335,19 @@ button {
     border-left: 4px solid var(--gold);
 }
 
+.summary-box {
+    margin-top: 2rem;
+    padding: 1.8rem;
+    background: rgba(212, 175, 55, 0.08);
+    border-radius: 15px;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: var(--gold);
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.8;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
 #lotto-section {
     margin-top: 5rem;
     padding-top: 3rem;

@@ -237,8 +237,11 @@ function generateSajuResult(name, birthInfo, gender) {
         <section class="analysis-section">
             <h3 class="section-title">4. ${name} ${titleName}의 2026년(丙午年) 총운</h3>
             <p class="seonbi-text">
-                ${formatText(`"**성취와 열정의 한 해가 될 것이오.** 병오년의 불꽃 같은 기운이 ${name} ${titleName}의 **${mainElement}** 기운과 조화를 이루며, 새로운 도약을 제촉하고 있구려. 두괄식으로 요약하자면, 그동안 준비해온 일들이 빛을 발하고 대외적인 명성이 높아지는 시기가 될 것이오. 다만 불의 기운이 강하니 감정 조절에 유의하고, 주변의 조언을 귀담아듣는다면 큰 화를 피하고 복을 쟁취할 수 있을 것이오."`)}
+                ${formatText(`"**성취와 열정의 한 해가 될 것이오.** 병오년의 불꽃 같은 기운이 ${name} ${titleName}의 **${mainElement}** 기운과 조화를 이루며, 새로운 도약을 재촉하고 있구려."`)}
             </p>
+            <div class="summary-box">
+                ${formatText(`"**요약하자면!** 그동안 준비해온 일들이 빛을 발하고 대외적인 명성이 높아지는 시기가 될 것이오. 다만 불의 기운이 강하니 감정 조절에 유의하고, 주변의 조언을 귀담아듣는다면 큰 화를 피하고 복을 쟁취할 수 있을 것이오."`)}
+            </div>
         </section>
 
         <section class="analysis-section">
