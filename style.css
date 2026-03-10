@@ -193,6 +193,18 @@ button {
     transition: all 0.3s;
 }
 
+.secondary-btn {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    margin-top: 2rem;
+}
+
+.secondary-btn:hover {
+    background: rgba(212, 175, 55, 0.1);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+}
+
 .hidden {
     display: none;
 }

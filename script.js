@@ -37,8 +37,31 @@ const SPIRIT_DATA = {
 
 // 드롭다운 옵션 초기화 (오전/오후만 유지되므로 초기화 불필요)
 document.addEventListener('DOMContentLoaded', function () {
-    // 필요한 초기화 로직이 있다면 여기에 추가
+    // URL 해시 상태에 따른 초기 화면 설정
+    handleNavigation();
+
+    // 해시 변경 감지
+    window.addEventListener('hashchange', handleNavigation);
 });
+
+function handleNavigation() {
+    const hash = window.location.hash;
+    const funnel = document.getElementById('funnel');
+    const result = document.getElementById('result');
+
+    if (hash === '#result') {
+        // 결과 데이터가 없는데 결과 페이지로 접근한 경우 입력 페이지로 리다이렉트
+        if (!document.getElementById('resultContent').innerHTML.trim()) {
+            window.location.hash = '';
+            return;
+        }
+        funnel.classList.add('hidden');
+        result.classList.remove('hidden');
+    } else {
+        funnel.classList.remove('hidden');
+        result.classList.add('hidden');
+    }
+}
 
 document.getElementById('sajuForm').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -60,12 +83,18 @@ document.getElementById('sajuForm').addEventListener('submit', function (e) {
         const birthInfo = `${year}년 ${month}월 ${day}일 ${ampm} ${hour}시 ${minute}분`;
         generateSajuResult(userName, birthInfo, gender);
 
-        document.getElementById('funnel').classList.add('hidden');
-        document.getElementById('result').classList.remove('hidden');
+        // URL 해시 변경 (자동으로 화면 전환 트리거됨)
+        window.location.hash = 'result';
         window.scrollTo(0, 0);
+
         submitBtn.innerText = "결과보기";
         submitBtn.disabled = false;
     }, 2000);
+});
+
+// 돌아가기 버튼 로직
+document.getElementById('backToFunnelBtn').addEventListener('click', function () {
+    window.location.hash = '';
 });
 
 // 텍스트 포맷팅 도우미 (하이라이트 + 가독성을 위한 줄바꿈)
