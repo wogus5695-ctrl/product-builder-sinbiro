@@ -157,7 +157,7 @@ function generateSajuResult(name, birthInfo, gender) {
     resultContent.innerHTML = `
         <div class="seonbi-intro card-header">
             <h2>에헴, ${name} ${titleName}의 운명이라오</h2>
-            <p>"음... 이 기운, 전상서에 적힌 대로 심상치 않구먼. 허허!"</p>
+            <p>음... 이 기운, 전상서에 적힌 대로 심상치 않구먼. 허허!</p>
         </div>
 
         <!-- 사용자의 사주를 상징하는 영물(십장생) -->
@@ -177,7 +177,7 @@ function generateSajuResult(name, birthInfo, gender) {
         </section>
         
         <p class="seonbi-text" style="margin-bottom: 2rem; margin-top: 2rem;">
-            ${formatText(`"그대가 태어난 때는 **${birthInfo}**이라. 하늘의 기운이 묘하게 얽혀있구려."`)}
+            ${formatText(`그대가 태어난 때는 **${birthInfo}**이라. 하늘의 기운이 묘하게 얽혀있구려.`)}
         </p>
 
         <section class="analysis-section">
@@ -220,7 +220,7 @@ function generateSajuResult(name, birthInfo, gender) {
                 `).join('')}
             </div>
             <p class="seonbi-text">
-                ${formatText(`"허허, 그대의 명식에는 **${mainElement}**의 기운이 가장 왕성하게 흐르고 있구려. 이는 삶의 중심을 잡아주는 든든한 뿌리가 될 수 있을 것이오."`)}
+                ${formatText(`허허, 그대의 명식에는 **${mainElement}**의 기운이 가장 왕성하게 흐르고 있구려. 이는 삶의 중심을 잡아주는 든든한 뿌리가 될 수 있을 것이오.`)}
             </p>
         </section>
 
@@ -230,16 +230,17 @@ function generateSajuResult(name, birthInfo, gender) {
                 <img src="${ELEMENT_IMAGES[mainElement]}" alt="${mainElement} 기운" class="element-image">
             </div>
             <p class="seonbi-text">
-                ${formatText(`"그대는 마치 **${getPertinentMetaphor(mainElement)}**와 같은 성정을 품고 있구려. ${pillars[1].top.desc}의 기운을 타고났으니, 남들에게 말 못 할 고고한 뜻이 가슴 깊이 자리 잡고 있을 가능성이 있어 보이오. 때로는 너무 강한 고집이 옥의 티가 될 수 있으나, 그 올곧음이 결국 그대를 빛내주는 보석이 될 수도 있을 것이라 생각하오."`)}
+                ${formatText(`그대는 마치 **${getPertinentMetaphor(mainElement)}**와 같은 성정을 품고 있구려. ${pillars[1].top.desc}의 기운을 타고났으니, 남들에게 말 못 할 고고한 뜻이 가슴 깊이 자리 잡고 있을 가능성이 있어 보이오. 때로는 너무 강한 고집이 옥의 티가 될 수 있으나, 그 올곧음이 결국 그대를 빛내주는 보석이 될 수도 있을 것이라 생각하오.`)}
             </p>
         </section>
 
         <section class="analysis-section">
             <h3 class="section-title">4. ${name} ${titleName}의 2026년(丙午年) 총운</h3>
             <div class="summary-box">
-                ${formatText(`"**성취와 열정의 한 해가 될 것이오.** 병오년의 불꽃 같은 기운이 ${name} ${titleName}의 **${mainElement}** 기운과 조화를 이루며, 새로운 도약을 재촉하고 있구려."`)}
+                ${formatText(`**<span class="gradient-gold">성취</span>와 <span class="gradient-gold">열정</span>의 한 해가 될 것이오.** 병오년의 불꽃 같은 기운이 ${name} ${titleName}의 **${mainElement}** 기운과 조화를 이루며, **<span class="gradient-gold">새로운 도약</span>**을 재촉하고 있구려.`)}
                 <br><br>
-                ${formatText(`"**요약하자면!** 그동안 준비해온 일들이 빛을 발하고 대외적인 명성이 높아지는 시기가 될 것이오. 다만 불의 기운이 강하니 감정 조절에 유의하고, 주변의 조언을 귀담아듣는다면 큰 화를 피하고 복을 쟁취할 수 있을 것이오."`)}
+                <strong>요약하자면!</strong><br>
+                <span class="gradient-gold">${formatText(`그동안 준비해온 일들이 빛을 발하고 대외적인 명성이 높아지는 시기가 될 것이오. 다만 불의 기운이 강하니 감정 조절에 유의하고, 주변의 조언을 귀담아듣는다면 큰 화를 피하고 복을 쟁취할 수 있을 것이오.`)}</span>
             </div>
         </section>
 
@@ -258,7 +259,7 @@ function generateSajuResult(name, birthInfo, gender) {
                 </svg>
             </div>
             <p class="seonbi-text" style="margin-top: 1.5rem;">
-                ${formatText(`"에헴! 이 지도를 보시게나. ${name} ${titleName}의 재물운은 **중년기**에 가장 높게 솟아오르는 형국이니, 지금부터 기운을 잘 닦아 거둘 준비를 하시게나."`)}
+                ${formatText(`에헴! 이 지도를 보시게나. ${name} ${titleName}의 재물운은 **중년기**에 가장 높게 솟아오르는 형국이니, 지금부터 기운을 잘 닦아 거둘 준비를 하시게나.`)}
             </p>
         </section>
 

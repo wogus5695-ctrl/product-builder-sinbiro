@@ -338,14 +338,23 @@ button {
 .summary-box {
     margin-top: 2rem;
     padding: 1.8rem;
-    background: rgba(212, 175, 55, 0.08);
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 15px;
     border: 1px solid rgba(212, 175, 55, 0.3);
-    color: var(--gold);
-    font-size: 1.15rem;
-    font-weight: 700;
+    color: var(--white);
+    font-size: 1.1rem;
+    font-weight: 400;
     line-height: 1.8;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.gradient-gold {
+    background: linear-gradient(135deg, #d4af37 0%, #f1d592 50%, #b38f20 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+    font-weight: 700;
 }
 
 #lotto-section {
