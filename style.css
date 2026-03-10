@@ -31,7 +31,7 @@ body {
     width: 100%;
     height: 100%;
     background: linear-gradient(rgba(13, 13, 13, 0.7), rgba(13, 13, 13, 0.8)),
-        url('file:///C:/Users/wogus/.gemini/antigravity/brain/2c175f86-9094-4615-aadb-03360823c978/bg_shipjangsaeng_mystical_1772871343904.png');
+        url('./images/bg_shipjangsaeng.png');
     background-size: cover;
     background-position: center;
     opacity: 1;

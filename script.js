@@ -1,9 +1,9 @@
 const ELEMENT_IMAGES = {
-    "목": "file:///C:/Users/wogus/.gemini/antigravity/brain/2c175f86-9094-4615-aadb-03360823c978/element_wood_1772788725454.png",
-    "화": "file:///C:/Users/wogus/.gemini/antigravity/brain/2c175f86-9094-4615-aadb-03360823c978/element_fire_1772788793513.png",
-    "토": "file:///C:/Users/wogus/.gemini/antigravity/brain/2c175f86-9094-4615-aadb-03360823c978/element_earth_1772789257433.png",
-    "금": "file:///C:/Users/wogus/.gemini/antigravity/brain/2c175f86-9094-4615-aadb-03360823c978/element_metal_1772789272250.png",
-    "수": "file:///C:/Users/wogus/.gemini/antigravity/brain/2c175f86-9094-4615-aadb-03360823c978/element_water_1772789285196.png"
+    "목": "./images/element_wood.png",
+    "화": "./images/element_fire.png",
+    "토": "./images/element_earth.png",
+    "금": "./images/element_metal.png",
+    "수": "./images/element_water.png"
 };
 
 // 십장생 및 영물 데이터 (이미지와 완벽 매칭)
