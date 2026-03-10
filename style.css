@@ -150,7 +150,8 @@ main {
 }
 
 select,
-input[type="text"] {
+input[type="text"],
+input[type="number"] {
     padding: 0.8rem 1rem;
     background: var(--glass);
     border: 1px solid rgba(212, 175, 55, 0.3);
@@ -159,6 +160,17 @@ input[type="text"] {
     outline: none;
     transition: border-color 0.3s;
     font-size: 0.9rem;
+}
+
+/* 숫자 입력 필드 화살표 제거 */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
 }
 
 .radio-group {

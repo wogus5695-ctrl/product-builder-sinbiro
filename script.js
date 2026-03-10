@@ -35,49 +35,9 @@ const SPIRIT_DATA = {
     }
 };
 
-// 드롭다운 옵션 초기화
+// 드롭다운 옵션 초기화 (오전/오후만 유지되므로 초기화 불필요)
 document.addEventListener('DOMContentLoaded', function () {
-    const yearSelect = document.getElementById('birthYear');
-    const monthSelect = document.getElementById('birthMonth');
-    const daySelect = document.getElementById('birthDay');
-    const hourSelect = document.getElementById('birthHour');
-    const minuteSelect = document.getElementById('birthMinute');
-
-    if (yearSelect) {
-        for (let i = 2026; i >= 1900; i--) {
-            const opt = document.createElement('option');
-            opt.value = i; opt.innerText = i + "년";
-            yearSelect.appendChild(opt);
-        }
-    }
-    if (monthSelect) {
-        for (let i = 1; i <= 12; i++) {
-            const opt = document.createElement('option');
-            opt.value = i; opt.innerText = i + "월";
-            monthSelect.appendChild(opt);
-        }
-    }
-    if (daySelect) {
-        for (let i = 1; i <= 31; i++) {
-            const opt = document.createElement('option');
-            opt.value = i; opt.innerText = i + "일";
-            daySelect.appendChild(opt);
-        }
-    }
-    if (hourSelect) {
-        for (let i = 0; i <= 12; i++) {
-            const opt = document.createElement('option');
-            opt.value = i; opt.innerText = i + "시";
-            hourSelect.appendChild(opt);
-        }
-    }
-    if (minuteSelect) {
-        for (let i = 0; i < 60; i += 10) {
-            const opt = document.createElement('option');
-            opt.value = i; opt.innerText = i + "분";
-            minuteSelect.appendChild(opt);
-        }
-    }
+    // 필요한 초기화 로직이 있다면 여기에 추가
 });
 
 document.getElementById('sajuForm').addEventListener('submit', function (e) {
