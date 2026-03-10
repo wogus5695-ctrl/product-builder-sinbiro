@@ -1,0 +1,350 @@
+:root {
+    --bg-color: #0d0d0d;
+    --card-bg: rgba(25, 25, 25, 0.9);
+    --gold: #d4af37;
+    --white: #f8f3e9;
+    --accent: #c0392b;
+    --text-muted: #a0a0a0;
+    --glass: rgba(255, 255, 255, 0.05);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--white);
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* 십장생 배경 효과 */
+.fog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(13, 13, 13, 0.7), rgba(13, 13, 13, 0.8)),
+        url('file:///C:/Users/wogus/.gemini/antigravity/brain/2c175f86-9094-4615-aadb-03360823c978/bg_shipjangsaeng_mystical_1772871343904.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 1;
+    pointer-events: none;
+    z-index: 1;
+}
+
+header {
+    text-align: center;
+    padding: 3rem 1rem;
+    position: relative;
+    z-index: 2;
+}
+
+header h1 {
+    font-family: 'Song Myung', serif;
+    font-size: 3.5rem;
+    color: var(--gold);
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    letter-spacing: 0.5rem;
+}
+
+main {
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 0 1.5rem 5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(15px);
+    transition: all 0.5s ease;
+}
+
+/* 동물 섹션 스타일 */
+.animal-section {
+    margin-bottom: 2rem;
+    background: linear-gradient(145deg, rgba(30, 30, 30, 0.9), rgba(15, 15, 15, 0.95));
+    border: 2px solid var(--gold);
+}
+
+.animal-visual {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.animal-image-container {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--gold);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    flex-shrink: 0;
+}
+
+.animal-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+
+.animal-image-container:hover .animal-image {
+    transform: scale(1.1);
+}
+
+.animal-info h4 {
+    font-family: 'Song Myung', serif;
+    font-size: 1.8rem;
+    color: var(--gold);
+    margin-bottom: 1rem;
+}
+
+.animal-desc {
+    padding: 1rem !important;
+    font-size: 0.95rem !important;
+    border-left: 2px solid var(--gold) !important;
+}
+
+@media (max-width: 600px) {
+    .animal-visual {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .animal-image-container {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    display: block;
+    font-size: 0.95rem;
+    margin-bottom: 0.6rem;
+    color: var(--gold);
+    font-weight: 700;
+}
+
+.scroll-inputs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+select,
+input[type="text"] {
+    padding: 0.8rem 1rem;
+    background: var(--glass);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: var(--white);
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s;
+    font-size: 0.9rem;
+}
+
+.radio-group {
+    display: flex;
+    gap: 2rem;
+}
+
+button {
+    width: 100%;
+    padding: 1.2rem;
+    background: linear-gradient(135deg, var(--gold), #b38f20);
+    border: none;
+    color: #000;
+    font-weight: 700;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    transition: all 0.3s;
+}
+
+.hidden {
+    display: none;
+}
+
+.highlight {
+    color: var(--gold);
+    font-weight: 700;
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+}
+
+.hanja-desc {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 5px;
+}
+
+.analysis-section {
+    margin-top: 3.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+.section-title {
+    font-family: 'Song Myung', serif;
+    color: var(--gold);
+    font-size: 1.5rem;
+    margin-bottom: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.saju-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.saju-table th,
+.saju-table td {
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.saju-char {
+    font-family: 'Song Myung', serif;
+    font-size: 1.8rem;
+    line-height: 1.2;
+}
+
+.element-bar-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+}
+
+.progress-bg {
+    flex: 1;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), #fff);
+    transition: width 1.5s ease-out;
+}
+
+.wealth-line-chart-container {
+    width: 100%;
+    height: 200px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+.chart-path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: dash 3s ease-in-out forwards;
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.mystical-image-container {
+    width: 100%;
+    height: 300px;
+    margin: 2.5rem 0;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.element-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.seonbi-text {
+    line-height: 2;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1.8rem;
+    border-radius: 15px;
+    font-style: italic;
+    border-left: 4px solid var(--gold);
+}
+
+#lotto-section {
+    margin-top: 5rem;
+    padding-top: 3rem;
+    border-top: 2px dashed rgba(212, 175, 55, 0.3);
+    text-align: center;
+}
+
+#lotto-section h3 {
+    font-family: 'Song Myung', serif;
+    color: var(--gold);
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+
+#lotto-section p {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
+
+#lotto-numbers-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.slot {
+    width: 45px;
+    height: 45px;
+    background: var(--gold);
+    color: #000;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+}
+
+.lotto-blur {
+    display: flex;
+    gap: 1rem;
+    filter: blur(8px);
+    transition: filter 1s ease;
+}
+
+.lotto-blur.unlocked {
+    filter: blur(0);
+}
