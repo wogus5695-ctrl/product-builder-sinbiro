@@ -292,9 +292,46 @@ button {
 }
 
 .saju-char {
-    font-family: 'Song Myung', serif;
+    font-family: 'Nanum Myeongjo', serif;
     font-size: 1.8rem;
     line-height: 1.2;
+    padding: 1.5rem 0.5rem !important;
+}
+
+.saju-table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 2rem;
+}
+
+.saju-table {
+    min-width: 450px;
+}
+
+.saju-table th {
+    background: rgba(212, 175, 55, 0.1);
+    font-size: 0.9rem;
+}
+
+.saju-table td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.pillar-title {
+    color: var(--gold);
+    font-weight: 700;
+}
+
+.ten-gods {
+    font-size: 0.75rem;
+    color: #f1d592;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.element-emo {
+    font-size: 0.8rem;
+    display: block;
+    margin-top: 5px;
 }
 
 .element-bar-group {
