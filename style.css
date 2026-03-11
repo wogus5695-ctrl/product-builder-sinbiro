@@ -442,7 +442,102 @@ button {
     font-size: 1.1rem;
 }
 
-/* 지장간 등 상세 분석 */
+/* 신살 리스트 스타일 */
+.sinsal-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.sinsal-list li {
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.sinsal-list li strong {
+    color: var(--gold);
+}
+
+/* 성격 및 성향 분석 스타일 */
+.personality-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.personality-point h4 {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: var(--gold);
+}
+
+.personality-point.strength p {
+    color: #fff;
+    border-left: 3px solid var(--gold);
+    padding-left: 1rem;
+}
+
+.personality-point.weakness p {
+    color: #ccc;
+    border-left: 3px solid #666;
+    padding-left: 1rem;
+}
+
+/* 타고난 복(福)의 요소 스타일 */
+.bok-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.bok-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 1.2rem;
+    text-align: center;
+    transition: all 0.3s;
+    opacity: 0.6;
+}
+
+.bok-card.active {
+    background: rgba(212, 175, 55, 0.05);
+    border-color: rgba(212, 175, 55, 0.4);
+    opacity: 1;
+    transform: scale(1.02);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.bok-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.8rem;
+}
+
+.bok-icon {
+    font-size: 1.5rem;
+}
+
+.bok-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--gold);
+}
+
+.bok-desc {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: #aaa;
+}
+
+.bok-card.active .bok-desc {
+    color: #eee;
+}
+
 .jijanggan-row td {
     font-size: 0.75rem;
     color: #888;

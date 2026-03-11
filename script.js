@@ -202,15 +202,17 @@ function getSinsal(pillars) {
     const branches = [pillars.year.bottom.char, pillars.month.bottom.char, pillars.day.bottom.char];
     if (pillars.hour) branches.push(pillars.hour.bottom.char);
 
-    const check = (list, name) => {
-        if (branches.some(b => list.includes(b))) sinsal.push(name);
+    const check = (list, name, desc) => {
+        if (branches.some(b => list.includes(b))) {
+            sinsal.push({ name, desc });
+        }
     };
 
-    check(["寅", "申", "巳", "亥"], "역마살(驛馬殺)");
-    check(["子", "午", "卯", "酉"], "도화살(桃花殺)");
-    check(["辰", "戌", "丑", "未"], "화개살(華蓋殺)");
+    check(["寅", "申", "巳", "亥"], "역마살(驛馬殺)", "활동량이 많고 이사나 이동수가 잦으며, 쉼 없이 개척해 나가는 역동적인 기운이오.");
+    check(["子", "午", "卯", "酉"], "도화살(桃花殺)", "타인에게 호감을 사고 시선을 끄는 매력이 넘치며, 예술적 감수성과 풍류를 즐기는 기운이구려.");
+    check(["辰", "戌", "丑", "未"], "화개살(華蓋殺)", "내면의 성찰이 깊고 예술, 종교적 심성이 풍부하며, 묻혀있던 재능이 다시 꽃피는 총명한 기운이오.");
 
-    return sinsal.length ? sinsal : ["특이 신살 없음"];
+    return sinsal.length ? sinsal : [{ name: "평온한 기운", desc: "특출난 신살의 작용보다는 오행의 균형이 돋보이는 평온한 흐름이오." }];
 }
 
 function generateSajuResultV4(data) {
@@ -234,7 +236,7 @@ function generateSajuResultV4(data) {
 
     resultDiv.innerHTML = `
         <div class="seonbi-intro card-header">
-            <h2>🔮 ${data.name} 님의 사주 분석 보고서 (v4.2)</h2>
+            <h2>🔮 ${data.name} 님의 사주 분석 보고서 (v4.3)</h2>
             <p>보정된 진태양시 기준: ${result.solarTime}시 (KST 대비 -30분 보정)</p>
         </div>
 
@@ -246,7 +248,7 @@ function generateSajuResultV4(data) {
                         <tr>
                             <th>구분</th>
                             <th>시주(時柱)</th>
-                            <th class="pillar-title">일주(日主)</th>
+                            <th class="pillar-title">일주(日주)</th>
                             <th>월주(月柱)</th>
                             <th>년주(年柱)</th>
                         </tr>
@@ -260,7 +262,7 @@ function generateSajuResultV4(data) {
                             ${renderPillarCell(result.year, 'top', tenGodsTable[0])}
                         </tr>
                         <tr>
-                            <td>지제(地支)</td>
+                            <td>지지(地支)</td>
                             ${renderPillarCell(result.hour, 'bottom', tenGodsTable[3])}
                             ${renderPillarCell(result.day, 'bottom', tenGodsTable[2])}
                             ${renderPillarCell(result.month, 'bottom', tenGodsTable[1])}
@@ -277,7 +279,10 @@ function generateSajuResultV4(data) {
                 </table>
             </div>
             <div class="analysis-box">
-                <p><strong>신살 분석:</strong> ${sinsal.join(', ')}</p>
+                <p><strong>신살 분석:</strong></p>
+                <ul class="sinsal-list">
+                    ${sinsal.map(s => `<li><strong>${s.name}:</strong> ${s.desc}</li>`).join('')}
+                </ul>
                 <p><strong>형충회합:</strong> ${getInteractions(result)}</p>
             </div>
         </section>
@@ -317,7 +322,69 @@ function generateSajuResultV4(data) {
                 <p><strong>직업 분석:</strong> 현재 종사하시는 <strong>'${data.job}'</strong> 분야는 본인의 ${getTenGods(dm, result.month.bottom)} 기운과 연결되어 있어, 시간이 흐를수록 뿌리가 깊어질 것이라 사료되오.</p>
             </div>
         </section>
+
+        <section class="analysis-section">
+            <h3 class="section-title">5. 성격 및 성향 분석 (강점과 보완점)</h3>
+            <div class="analysis-box personality-box">
+                <div class="personality-point strength">
+                    <h4>🌟 타고난 강점</h4>
+                    <p>${getPersonalityAnalysis(dm, scores, true)}</p>
+                </div>
+                <div class="personality-point weakness">
+                    <h4>⚠️ 보완할 약점</h4>
+                    <p>${getPersonalityAnalysis(dm, scores, false)}</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="analysis-section">
+            <h3 class="section-title">6. 타고난 복(福)의 요소</h3>
+            <div class="bok-grid">
+                ${getBokAnalysis(dm, scores, allPillars)}
+            </div>
+        </section>
     `;
+}
+
+function getPersonalityAnalysis(dm, scores, isStrength) {
+    const strengths = {
+        "목": "한 번 마음먹은 일은 끝까지 밀어붙이는 강한 추진력과, 어떤 환경에서도 굴하지 않는 넘치는 생명력이 큰 무기라오.",
+        "화": "주변을 환히 비추는 밝은 에너지와 열정, 그리고 타인을 배려하는 따뜻한 예절이 그대의 가장 큰 미덕이오.",
+        "토": "무게감 있는 신의와 포용력으로 많은 이들의 신뢰를 얻으며, 흔들림 없이 중심을 잡는 안정감이 탁월하오.",
+        "금": "칼날 같은 결단력과 명확한 정의감, 그리고 한 번 맺은 인연을 끝까지 책임지는 의리가 그대의 자부심이 될 것이오.",
+        "수": "막힘없이 흐르는 지혜와 깊은 통찰력, 그리고 어떤 상황에서도 유연하게 대처하는 처세가 매우 뛰어나구려."
+    };
+    const weaknesses = {
+        "목": "직진하려는 성향이 강해 때로는 독단적일 수 있으니, 타인의 조언을 수용하는 유연함을 기른다면 더욱 완벽해질 것이오.",
+        "화": "열정이 과해 감정의 기복이 생길 수 있으니, 고요하게 내면을 다스리는 명상이나 취미를 통해 평정심을 유지하시게.",
+        "토": "생각이 깊어 실천이 더뎌질 수 있고 지나치게 보수적일 수 있으니, 가끔은 도전적인 변화를 즐겨보는 것도 좋소.",
+        "금": "옳고 그름이 너무 분명하여 타인을 날카롭게 대할 수 있으니, 둥근 마음으로 포용하는 미덕을 발휘해야 운이 열린다오.",
+        "수": "생각이 너무 많아 잡념에 빠지거나 속내를 숨길 수 있으니, 밝고 긍정적인 생각으로 소통의 창을 넓히는 것이 필요하오."
+    };
+    return isStrength ? strengths[dm.elem] : weaknesses[dm.elem];
+}
+
+function getBokAnalysis(dm, scores, pillars) {
+    const bokTypes = [
+        { name: "인복(人福)", key: "인성", desc: "도움을 주는 귀인과 스승이 항상 곁에 있소." },
+        { name: "식복(食福)", key: "식상", desc: "의식주 걱정 없이 풍요로운 삶을 누릴 팔자요." },
+        { name: "재물복(財物福)", key: "재성", desc: "노력한 만큼 재화가 쌓이고 자산이 불어나오." },
+        { name: "명예복(官福)", key: "관성", desc: "사회적 지위와 명성, 따르는 무리가 생기구려." },
+        { name: "건강복(壽福)", key: "비겁", desc: "강인한 기력으로 장수하며 편안함을 누리리라." }
+    ];
+
+    return bokTypes.map(bok => {
+        const hasBok = pillars.some(p => getTenGods(dm, p.top).includes(bok.key.substring(0, 1)) || getTenGods(dm, p.bottom).includes(bok.key.substring(0, 1)));
+        return `
+            <div class="bok-card ${hasBok ? 'active' : ''}">
+                <div class="bok-header">
+                    <span class="bok-icon">${hasBok ? '✨' : '☁️'}</span>
+                    <span class="bok-name">${bok.name}</span>
+                </div>
+                <p class="bok-desc">${hasBok ? bok.desc : '아직 씨앗이 자라는 중이나 정성을 다하면 열매를 맺으리라.'}</p>
+            </div>
+        `;
+    }).join('');
 }
 
 function renderJijanggan(pillar) {
