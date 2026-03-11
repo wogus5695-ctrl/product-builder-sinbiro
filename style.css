@@ -183,6 +183,35 @@ input[type=number] {
     appearance: none;
 }
 
+input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 0.8rem;
+    user-select: none;
+    transition: color 0.3s;
+}
+
+.checkbox-container:hover {
+    color: var(--gold);
+}
+
+.checkbox-container input {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--gold);
+}
+
 .radio-group {
     display: flex;
     gap: 2rem;

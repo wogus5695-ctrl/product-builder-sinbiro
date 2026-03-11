@@ -37,6 +37,11 @@ const SPIRIT_DATA = {
 
 // 드롭다운 옵션 초기화 (오전/오후만 유지되므로 초기화 불필요)
 document.addEventListener('DOMContentLoaded', function () {
+    // 새로고침 시 정보입력 페이지로 돌아가도록 해시 초기화
+    if (window.location.hash === '#result') {
+        window.location.hash = '';
+    }
+
     // URL 해시 상태에 따른 초기 화면 설정
     handleNavigation();
 
@@ -63,6 +68,30 @@ function handleNavigation() {
     }
 }
 
+// 시간 모름 체크박스 로직
+document.getElementById('unknownTime').addEventListener('change', function (e) {
+    const isChecked = e.target.checked;
+    const hourInput = document.getElementById('birthHour');
+    const minuteInput = document.getElementById('birthMinute');
+    const ampmSelect = document.getElementById('birthAmPm');
+
+    if (isChecked) {
+        hourInput.disabled = true;
+        minuteInput.disabled = true;
+        ampmSelect.disabled = true;
+        hourInput.removeAttribute('required');
+        minuteInput.removeAttribute('required');
+        hourInput.value = '';
+        minuteInput.value = '';
+    } else {
+        hourInput.disabled = false;
+        minuteInput.disabled = false;
+        ampmSelect.disabled = false;
+        hourInput.setAttribute('required', '');
+        minuteInput.setAttribute('required', '');
+    }
+});
+
 document.getElementById('sajuForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
@@ -79,8 +108,15 @@ document.getElementById('sajuForm').addEventListener('submit', function (e) {
         const hour = document.getElementById('birthHour').value;
         const minute = document.getElementById('birthMinute').value;
         const gender = document.querySelector('input[name="gender"]:checked').value;
+        const isUnknownTime = document.getElementById('unknownTime').checked;
 
-        const birthInfo = `${year}년 ${month}월 ${day}일 ${ampm} ${hour}시 ${minute}분`;
+        let birthInfo = '';
+        if (isUnknownTime) {
+            birthInfo = `${year}년 ${month}월 ${day}일 (시간 모름)`;
+        } else {
+            birthInfo = `${year}년 ${month}월 ${day}일 ${ampm} ${hour}시 ${minute}분`;
+        }
+
         generateSajuResult(userName, birthInfo, gender);
 
         // URL 해시 변경 (자동으로 화면 전환 트리거됨)
