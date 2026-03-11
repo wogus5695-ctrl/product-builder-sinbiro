@@ -403,3 +403,52 @@ button {
 .lotto-blur.unlocked {
     filter: blur(0);
 }
+
+/* 추가 정보 섹션 (애드센스용) */
+.info-content {
+    margin-top: 3rem;
+    padding: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.static-text-box {
+    line-height: 1.8;
+    color: #bbb;
+    font-size: 0.95rem;
+}
+
+.static-text-box p {
+    margin-bottom: 1.2rem;
+}
+
+footer {
+    text-align: center;
+    padding: 4rem 1rem;
+    margin-top: 5rem;
+    border-top: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.footer-links {
+    margin-bottom: 1.5rem;
+}
+
+.footer-links a {
+    color: #888;
+    text-decoration: none;
+    font-size: 0.85rem;
+    margin: 0 0.5rem;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: var(--gold);
+}
+
+.footer-disclaimer {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 1rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
