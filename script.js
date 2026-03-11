@@ -126,53 +126,101 @@ document.getElementById('sajuForm').addEventListener('submit', function (e) {
     }, 2000);
 });
 
+// 지장간(Jijanggan) 데이터
+const JIJANGGAN = {
+    "子": ["壬", "癸"], "丑": ["癸", "辛", "己"], "寅": ["戊", "丙", "甲"], "卯": ["甲", "乙"],
+    "辰": ["乙", "癸", "戊"], "巳": ["戊", "庚", "丙"], "午": ["丙", "己", "丁"], "未": ["丁", "乙", "己"],
+    "申": ["戊", "壬", "庚"], "酉": ["庚", "辛"], "戌": ["辛", "丁", "戊"], "亥": ["戊", "甲", "壬"]
+};
+
 // 진태양시 및 사주 원국 계산 공식 (Deterministic v4.1)
 function calculateSaju(data) {
-    // 1. 진태양시 보정 (대한민국 기준 동경 127.5도, KST 135도 차이 30분 보정)
     let totalMinutes = (data.ampm === 'PM' && data.hour !== 12 ? data.hour + 12 : (data.ampm === 'AM' && data.hour === 12 ? 0 : data.hour)) * 60 + data.min;
-    if (!data.isUnknown) totalMinutes -= 30; // 보정
+    if (!data.isUnknown) totalMinutes -= 30;
 
     const correctedHour = Math.floor((totalMinutes < 0 ? totalMinutes + 1440 : totalMinutes) / 60);
-
-    // 2. 일주 계산 (1900-01-01 갑술 기준일 경과일수 활용)
     const baseDate = new Date(1900, 0, 1);
     const birthDate = new Date(data.year, data.month - 1, data.day);
     const diffDays = Math.floor((birthDate - baseDate) / (24 * 60 * 60 * 1000));
 
-    // 갑술(10번)에서 시작
     const dayStemIdx = (diffDays + 0) % 10;
     const dayBranchIdx = (diffDays + 10) % 12;
-
-    // 3. 년주/월주 (간략화된 절기 계산 - 실제 상용 서비스에서는 Ephemeris API 권장)
     const yearStemIdx = (data.year - 4) % 10;
     const yearBranchIdx = (data.year - 4) % 12;
 
-    // 월주 (년주에 따른 월간법 적용)
-    let monthBranchIdx = (data.month + 1) % 12; // 인월(1월) 기준
+    let monthBranchIdx = (data.month + 1) % 12;
     let monthStemBase = (yearStemIdx % 5) * 2 + 2;
     let monthStemIdx = (monthStemBase + data.month - 1) % 10;
 
-    // 4. 시주 (일간에 따른 시간법 적용)
     let hourBranchIdx = Math.floor((correctedHour + 1) / 2) % 12;
     let hourStemBase = (dayStemIdx % 5) * 2;
     let hourStemIdx = (hourStemBase + hourBranchIdx) % 10;
 
-    return {
+    const pillars = {
         year: { top: STEMS[yearStemIdx], bottom: BRANCHES[yearBranchIdx] },
         month: { top: STEMS[monthStemIdx], bottom: BRANCHES[monthBranchIdx] },
         day: { top: STEMS[dayStemIdx], bottom: BRANCHES[dayBranchIdx] },
         hour: data.isUnknown ? null : { top: STEMS[hourStemIdx], bottom: BRANCHES[hourBranchIdx] },
         solarTime: correctedHour
     };
+
+    // 대운 계산
+    const daewun = calculateDaewun(data, pillars);
+    return { ...pillars, daewun };
+}
+
+function calculateDaewun(data, pillars) {
+    const isYangYear = pillars.year.top.polar === 'yang';
+    const isForward = (data.gender === 'male' && isYangYear) || (data.gender === 'female' && !isYangYear);
+
+    // 대운수 (간략화: 날짜 기반 근사치)
+    const daewunNum = Math.max(1, Math.min(9, Math.floor((data.day % 30) / 3) || 5));
+
+    const cycles = [];
+    let curStemIdx = STEMS.findIndex(s => s.char === pillars.month.top.char);
+    let curBranchIdx = BRANCHES.findIndex(b => b.char === pillars.month.bottom.char);
+
+    for (let i = 1; i <= 10; i++) {
+        if (isForward) {
+            curStemIdx = (curStemIdx + 1) % 10;
+            curBranchIdx = (curBranchIdx + 1) % 12;
+        } else {
+            curStemIdx = (curStemIdx + 9) % 10; // (curStemIdx - 1 + 10) % 10
+            curBranchIdx = (curBranchIdx + 11) % 12; // (curBranchIdx - 1 + 12) % 12
+        }
+        cycles.push({
+            age: daewunNum + (i - 1) * 10,
+            top: STEMS[curStemIdx],
+            bottom: BRANCHES[curBranchIdx]
+        });
+    }
+    return { number: daewunNum, cycles };
+}
+
+function getSinsal(pillars) {
+    const sinsal = [];
+    const branches = [pillars.year.bottom.char, pillars.month.bottom.char, pillars.day.bottom.char];
+    if (pillars.hour) branches.push(pillars.hour.bottom.char);
+
+    const check = (list, name) => {
+        if (branches.some(b => list.includes(b))) sinsal.push(name);
+    };
+
+    check(["寅", "申", "巳", "亥"], "역마살(驛馬殺)");
+    check(["子", "午", "卯", "酉"], "도화살(桃花殺)");
+    check(["辰", "戌", "丑", "未"], "화개살(華蓋殺)");
+
+    return sinsal.length ? sinsal : ["특이 신살 없음"];
 }
 
 function generateSajuResultV4(data) {
-    const pillars = calculateSaju(data);
-    const dm = pillars.day.top;
+    const result = calculateSaju(data);
+    const dm = result.day.top;
+    const sinsal = getSinsal(result);
     const resultDiv = document.getElementById('resultContent');
 
     // 십성 및 오행 분석
-    const allPillars = [pillars.year, pillars.month, pillars.day, pillars.hour].filter(p => p !== null);
+    const allPillars = [result.year, result.month, result.day, result.hour].filter(p => p !== null);
     const scores = { "목": 0, "화": 0, "토": 0, "금": 0, "수": 0 };
     allPillars.forEach(p => {
         scores[p.top.elem]++;
@@ -186,12 +234,12 @@ function generateSajuResultV4(data) {
 
     resultDiv.innerHTML = `
         <div class="seonbi-intro card-header">
-            <h2>🔮 ${data.name} 님의 사주 분석 보고서 (v4.1)</h2>
-            <p>보정된 진태양시 기준: ${pillars.solarTime}시 (KST 대비 -30분 보정)</p>
+            <h2>🔮 ${data.name} 님의 사주 분석 보고서 (v4.2)</h2>
+            <p>보정된 진태양시 기준: ${result.solarTime}시 (KST 대비 -30분 보정)</p>
         </div>
 
         <section class="analysis-section">
-            <h3 class="section-title">1. 사주 원국 (四柱 原局)</h3>
+            <h3 class="section-title">1. 사주 원국 및 지장간 (四柱 & 地藏干)</h3>
             <div class="saju-table-wrapper">
                 <table class="saju-table">
                     <thead>
@@ -206,45 +254,106 @@ function generateSajuResultV4(data) {
                     <tbody>
                         <tr>
                             <td>천간(天干)</td>
-                            ${renderPillarCell(pillars.hour, 'top', tenGodsTable[3])}
-                            ${renderPillarCell(pillars.day, 'top', { top: '日干' })}
-                            ${renderPillarCell(pillars.month, 'top', tenGodsTable[1])}
-                            ${renderPillarCell(pillars.year, 'top', tenGodsTable[0])}
+                            ${renderPillarCell(result.hour, 'top', tenGodsTable[3])}
+                            ${renderPillarCell(result.day, 'top', { top: '일간(DM)' })}
+                            ${renderPillarCell(result.month, 'top', tenGodsTable[1])}
+                            ${renderPillarCell(result.year, 'top', tenGodsTable[0])}
                         </tr>
                         <tr>
                             <td>지제(地支)</td>
-                            ${renderPillarCell(pillars.hour, 'bottom', tenGodsTable[3])}
-                            ${renderPillarCell(pillars.day, 'bottom', tenGodsTable[2])}
-                            ${renderPillarCell(pillars.month, 'bottom', tenGodsTable[1])}
-                            ${renderPillarCell(pillars.year, 'bottom', tenGodsTable[0])}
+                            ${renderPillarCell(result.hour, 'bottom', tenGodsTable[3])}
+                            ${renderPillarCell(result.day, 'bottom', tenGodsTable[2])}
+                            ${renderPillarCell(result.month, 'bottom', tenGodsTable[1])}
+                            ${renderPillarCell(result.year, 'bottom', tenGodsTable[0])}
+                        </tr>
+                        <tr class="jijanggan-row">
+                            <td>지장간</td>
+                            ${renderJijanggan(result.hour)}
+                            ${renderJijanggan(result.day)}
+                            ${renderJijanggan(result.month)}
+                            ${renderJijanggan(result.year)}
                         </tr>
                     </tbody>
                 </table>
             </div>
-        </section>
-
-        <section class="analysis-section">
-            <h3 class="section-title">2. 오행 및 기운 분석</h3>
-            <div class="element-chart">
-                ${Object.entries(scores).map(([elem, score]) => `
-                    <div class="element-bar-group">
-                        <span class="element-label">${elem}</span>
-                        <div class="progress-bg"><div class="progress-fill" style="width: ${(score / 8) * 100}%; background: ${getElemColor(elem)}"></div></div>
-                        <span class="element-score">${score}자</span>
-                    </div>
-                `).join('')}
+            <div class="analysis-box">
+                <p><strong>신살 분석:</strong> ${sinsal.join(', ')}</p>
+                <p><strong>형충회합:</strong> ${getInteractions(result)}</p>
             </div>
         </section>
 
         <section class="analysis-section">
-            <h3 class="section-title">3. 운명적 성격 및 직업 분석</h3>
+            <h3 class="section-title">2. 대운 흐름 (10년 주기 운의 변화)</h3>
+            <p class="small-desc">대운수: ${result.daewun.number} (태어난 후 ${result.daewun.number}년마다 운이 변합니다)</p>
+            <div class="daewun-scroll-wrapper">
+                <div class="daewun-container">
+                    ${result.daewun.cycles.map(c => `
+                        <div class="daewun-card">
+                            <span class="daewun-age">${c.age}세</span>
+                            <div class="daewun-pillar">
+                                <span>${c.top.char}</span>
+                                <span>${c.bottom.char}</span>
+                            </div>
+                            <span class="daewun-emo">${c.top.emoji}${c.bottom.emoji}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </section>
+
+        <section class="analysis-section">
+            <h3 class="section-title">3. 2026년(丙午年) 상세 세운</h3>
+            <div class="summary-box">
+                <p><strong>총평:</strong> 병오년의 불꽃 같은 열기가 ${data.name} 님의 <strong>${dm.elem}</strong> 기운과 ${dm.elem === '수' ? '충돌하며 긴장감' : '만나 에너지가 증폭'}되는 한 해가 될 것이오.</p>
+                <p><strong>주의사항:</strong> 지지의 '오(午)'화가 기존 원국과 ${getInteractions(result, '午')}을 형성하니, 대인관계에서의 구설수나 감정 과잉을 경계하되 추진력은 잃지 말아야 하오.</p>
+            </div>
+        </section>
+
+        <section class="analysis-section">
+            <h3 class="section-title">4. 직업 적성 및 궁합</h3>
             <div class="seonbi-text">
-                <p><strong>천부적 성향:</strong> ${data.name} 님은 <strong>${dm.emoji} ${dm.name}(${dm.char})</strong> 일간을 타고나셨구려. 이는 사주에서 본인을 상징하는 가장 중요한 기운으로, ${dm.elem}의 성질을 강하게 띠고 있소. ${getDetailedDesc(dm, scores)}</p>
-                <p><strong>현재 직업(${data.job})과의 조화:</strong> 본인의 사주 격국을 볼 때, ${data.job} 분야는 ${getJobAnalysis(dm, data.job, pillars)}한 흐름을 보이고 있구먼. 특히 월지의 기운이 강하게 작용하니 인내심을 갖고 전문성을 쌓는다면 충분히 대성할 격이라오.</p>
-                <p><strong>앞으로의 조언:</strong> 올해는 ${dm.elem}의 기운을 보완해주는 ${getAdvice(scores)}이 필요한 시기라오. 과한 욕심보다는 본연의 자리를 지키며 덕을 쌓는다면, 머지않아 큰 기회가 문을 두드릴 것이오. 에헴!</p>
+                <p><strong>추천 직업군:</strong> ${getRecommendedJobs(dm, scores)}</p>
+                <p><strong>최고의 궁합:</strong> ${getCompatibility(dm)} 타입의 사람과 함께할 때 가장 큰 시너지가 발생할 것이오.</p>
+                <p><strong>직업 분석:</strong> 현재 종사하시는 <strong>'${data.job}'</strong> 분야는 본인의 ${getTenGods(dm, result.month.bottom)} 기운과 연결되어 있어, 시간이 흐를수록 뿌리가 깊어질 것이라 사료되오.</p>
             </div>
         </section>
     `;
+}
+
+function renderJijanggan(pillar) {
+    if (!pillar) return `<td>-</td>`;
+    const hidden = JIJANGGAN[pillar.bottom.char];
+    return `<td class="jijanggan-cell">${hidden.join(' ')}</td>`;
+}
+
+function getInteractions(result, extra = null) {
+    const b = [result.year.bottom.char, result.month.bottom.char, result.day.bottom.char];
+    if (result.hour) b.push(result.hour.bottom.char);
+    if (extra) b.push(extra);
+
+    const interactions = [];
+    if (b.includes("子") && b.includes("午")) interactions.push("자오충(子午冲)");
+    if (b.includes("寅") && b.includes("申")) interactions.push("인신충(寅申冲)");
+    if (b.includes("卯") && b.includes("酉")) interactions.push("묘유충(卯酉冲)");
+    if (b.includes("子") && b.includes("丑")) interactions.push("자축합(子丑合)");
+
+    return interactions.length ? interactions.join(', ') : "특이 기운 작용 없음";
+}
+
+function getRecommendedJobs(dm, scores) {
+    const jobs = {
+        "목": "교육, 문학, 설계, 디자인, 상담",
+        "화": "IT, 미디어, 예술, 마케팅, 조명",
+        "토": "부동산, 중개, 인사관리, 종교, 농업",
+        "금": "금융, 법조, 엔지니어링, 금속조합",
+        "수": "기획, 해양, 유통, 심리학, 연구원"
+    };
+    return jobs[dm.elem];
+}
+
+function getCompatibility(dm) {
+    const map = { "목": "화(火)", "화": "토(土)", "토": "금(金)", "금": "수(水)", "수": "목(木)" };
+    return map[dm.elem] || "상권(象權)";
 }
 
 function renderPillarCell(pillar, pos, tg) {
